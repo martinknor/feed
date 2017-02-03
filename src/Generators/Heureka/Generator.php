@@ -12,13 +12,21 @@ use Mk\Feed\Generators\BaseGenerator;
 abstract class Generator extends BaseGenerator {
 
     /**
+     * Name of template directory
+     */
+    const TEMPLATE_DIR = 'latte';
+    
+    /**
      * @param $name
      * @return string
      */
     protected function getTemplate($name)
     {
-        $reflection = new \ReflectionClass(__CLASS__);
-        return dirname($reflection->getFileName()) . '/latte/' . $name . '.latte';
+        return sprintf(
+            '%s/%s/%s.latte',
+            __DIR__,
+            self::TEMPLATE_DIR,
+            $name
+        );
     }
-
 }
