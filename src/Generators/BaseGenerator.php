@@ -1,9 +1,9 @@
 <?php
+
 namespace Mk\Feed\Generators;
 
 use Latte\Engine;
 use Mk\Feed\Storage;
-use Nette\Object;
 use Mk\Feed\FileEmptyException;
 use Mk\Feed\ItemIncompletedException;
 
@@ -12,7 +12,10 @@ use Mk\Feed\ItemIncompletedException;
  * @author Martin Knor <martin.knor@gmail.com>
  * @package Mk\Feed\Generators
  */
-abstract class BaseGenerator extends Object implements IGenerator {
+abstract class BaseGenerator implements IGenerator {
+
+    /* Použití smartobject viz php 7.2 to nette 2.4 */
+    use \Nette\SmartObject;
 
     /** @var bool true if some products added */
     private $prepared = false;

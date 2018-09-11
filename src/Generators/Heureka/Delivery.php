@@ -9,7 +9,10 @@ use Mk, Nette;
  * @author Martin Knor <martin.knor@gmail.com>
  * @package Mk\Feed\Generators\Heureka
  */
-class Delivery extends Nette\Object {
+class Delivery{
+
+    /* Použití smartobject viz php 7.2 to nette 2.4 */
+    use \Nette\SmartObject;
 
     CONST CESKA_POSTA = 'CESKA_POSTA',
         CESKA_POSTA_NA_POSTU = 'CESKA_POSTA_NA_POSTU',

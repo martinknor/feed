@@ -9,7 +9,10 @@ use Mk, Nette;
  * @author Martin Knor <martin.knor@gmail.com>
  * @package Mk\Feed\Generators\Heureka
  */
-class Parameter extends Nette\Object {
+class Parameter {
+
+    /* Použití smartobject viz php 7.2 to nette 2.4 */
+    use \Nette\SmartObject;
 
     protected $name;
     protected $value;

@@ -4,7 +4,10 @@ namespace Mk\Feed\Generators\Zbozi;
 
 use Mk, Nette;
 
-class ShopDepot extends Nette\Object {
+class ShopDepot {
+
+    /* Použití smartobject viz php 7.2 to nette 2.4 */
+    use \Nette\SmartObject;
 
     private $id;
 

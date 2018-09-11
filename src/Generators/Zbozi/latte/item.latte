@@ -1,54 +1,54 @@
 {contentType xml}
 <SHOPITEM>
-    <PRODUCTNAME>{$item->productName}</PRODUCTNAME>
-    <DESCRIPTION>{$item->description}</DESCRIPTION>
-    <URL>{$item->url}</URL>
-    <PRICE_VAT>{$item->priceVat}</PRICE_VAT>
-    <DELIVERY_DATE>{$item->deliveryDate}</DELIVERY_DATE>
-    <ITEM_ID n:if="$item->itemId">{$item->itemId}</ITEM_ID>
+    <PRODUCTNAME>{$item->getProductName()}</PRODUCTNAME>
+    <DESCRIPTION>{$item->getDescription()}</DESCRIPTION>
+    <URL>{$item->getUrl()}</URL>
+    <PRICE_VAT>{$item->getPriceVat()}</PRICE_VAT>
+    <DELIVERY_DATE>{$item->getDeliveryDate()}</DELIVERY_DATE>
+    <ITEM_ID n:if="$item->getItemId()">{$item->getItemId()}</ITEM_ID>
 
-    {if !empty($images = $item->images)}
-        <IMGURL n:foreach="$images as $image">{$image->url}</IMGURL>
+    {if !empty($images = $item->getImages())}
+        <IMGURL n:foreach="$images as $image">{$image->getUrl()}</IMGURL>
     {/if}
 
-    <EAN n:if="$item->ean">{$item->ean}</EAN>
-    <ISBN n:if="$item->isbn">{$item->isbn}</ISBN>
-    <PRODUCTNO n:if="$item->productNo">{$item->productNo}</PRODUCTNO>
-    <ITEMGROUP_ID n:if="$item->itemGroupId">{$item->itemGroupId}</ITEMGROUP_ID>
-    <MANUFACTURER n:if="$item->manufacturer">{$item->manufacturer}</MANUFACTURER>
-    <BRAND n:if="$item->brand">{$item->brand}</BRAND>
-    <CATEGORY_ID n:if="$item->categoryId">{$item->categoryId}</CATEGORY_ID>
+    <EAN n:if="$item->getEan()">{$item->getEan()}</EAN>
+    <ISBN n:if="$item->getIsbn()">{$item->getIsbn()}</ISBN>
+    <PRODUCTNO n:if="$item->getProductNo()">{$item->getProductNo()}</PRODUCTNO>
+    <ITEMGROUP_ID n:if="$item->getItemGroupId()">{$item->getItemGroupId()}</ITEMGROUP_ID>
+    <MANUFACTURER n:if="$item->getManufacturer()">{$item->getManufacturer()}</MANUFACTURER>
+    <BRAND n:if="$item->getBrand()">{$item->getBrand()}</BRAND>
+    <CATEGORY_ID n:if="$item->getCategoryId()">{$item->getCategoryId()}</CATEGORY_ID>
 
-    {if !empty($categoryTexts = $item->categoryTexts)}
-        <CATEGORYTEXT n:foreach="$categoryTexts as $categoryText" n:if="!empty($categoryText->text)">{$categoryText->text}</CATEGORYTEXT>
+    {if !empty($categoryTexts = $item->getCategoryTexts())}
+        <CATEGORYTEXT n:foreach="$categoryTexts as $categoryText" n:if="!empty($categoryText->getText())">{$categoryText->getText()}</CATEGORYTEXT>
     {/if}
 
-    <PRODUCT n:if="$item->product">{$item->product}</PRODUCT>
+    <PRODUCT n:if="$item->getProduct()">{$item->getProduct()}</PRODUCT>
     {*<ITEM_TYPE n:if="$item->type">{$item->type}</ITEM_TYPE>*}
 
-    {if !empty($extraMessages = $item->extraMessages)}
-        <EXTRA_MESSAGE n:foreach="$extraMessages as $extraMessage">{$extraMessage->type}</EXTRA_MESSAGE>
+    {if !empty($extraMessages = $item->getExtraMessages())}
+        <EXTRA_MESSAGE n:foreach="$extraMessages as $extraMessage">{$extraMessage->getType()}</EXTRA_MESSAGE>
     {/if}
 
-    {if !empty($shopDepots = $item->shopDepots)}
-        <SHOP_DEPOTS n:foreach="$shopDepots as $shopDepot">{$shopDepot->id}</SHOP_DEPOTS>
+    {if !empty($shopDepots = $item->getShopDepots())}
+        <SHOP_DEPOTS n:foreach="$shopDepots as $shopDepot">{$shopDepot->getId()}</SHOP_DEPOTS>
     {/if}
 
-    <VISIBILITY n:if="!$item->visibility">{$item->visibility ? 1 : 0}</VISIBILITY>
-    <CUSTOM_LABEL_0 n:if="$item->customLabel">{$item->customLabel}</CUSTOM_LABEL_0>
-    <CUSTOM_LABEL_1 n:if="$item->customLabel1">{$item->customLabel1}</CUSTOM_LABEL_1>
-    <MAX_CPC n:if="isset($item->maxCpc) && $item->maxCpc>0">{$item->maxCpc}</MAX_CPC>
-    <MAX_CPC_SEARCH n:if="isset($item->maxCpcSearch) && $item->maxCpcSearch>0">{$item->maxCpcSearch}</MAX_CPC_SEARCH>
+    <VISIBILITY n:if="!$item->isVisibility()">{$item->isVisibility() ? 1 : 0}</VISIBILITY>
+    <CUSTOM_LABEL_0 n:if="$item->getCustomLabel()">{$item->getCustomLabel()}</CUSTOM_LABEL_0>
+    <CUSTOM_LABEL_1 n:if="$item->getCustomLabel()">{$item->getCustomLabel()}</CUSTOM_LABEL_1>
+    <MAX_CPC n:if="isset($item->maxCpc) && $item->getMaxCpc()>0">{$item->getMaxCpc()}</MAX_CPC>
+    <MAX_CPC_SEARCH n:if="isset($item->maxCpcSearch) && $item->getMaxCpcSearch()>0">{$item->getMaxCpcSearch()}</MAX_CPC_SEARCH>
 
-    {if !empty($parameters = $item->parameters)}
+    {if !empty($parameters = $item->getParameters())}
         <PARAM n:foreach="$parameters as $parameter">
-            <PARAM_NAME>{$parameter->name}</PARAM_NAME>
-            <VAL>{$parameter->value}</VAL>
-            <UNIT n:if="!empty($parameter->unit)">{$parameter->unit}</UNIT>
+            <PARAM_NAME>{$parameter->getName()}</PARAM_NAME>
+            <VAL>{$parameter->getValue()}</VAL>
+            <UNIT n:if="!empty($parameter->getUnit())">{$parameter->getUnit()}</UNIT>
         </PARAM>
     {/if}
 
-    <PRODUCT_LINE n:if="$item->productLine">{$item->productLine}</PRODUCT_LINE>
-    <LIST_PRICE n:if="$item->listPrice">{$item->listPrice}</LIST_PRICE>
-    <RELEASE_DATE n:if="$item->releaseDate">{$item->releaseDate|date:'c'}</RELEASE_DATE>
+    <PRODUCT_LINE n:if="$item->getProductLine()">{$item->getProductLine()}</PRODUCT_LINE>
+    <LIST_PRICE n:if="$item->getListPrice()">{$item->getListPrice()}</LIST_PRICE>
+    <RELEASE_DATE n:if="$item->getReleaseDate()">{$item->getReleaseDate()|date:'c'}</RELEASE_DATE>
 </SHOPITEM>
