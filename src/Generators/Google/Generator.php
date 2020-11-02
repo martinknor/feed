@@ -1,24 +1,19 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators\Google;
+
 
 use Mk\Feed\Generators\BaseGenerator;
 
-/**
- * Class Generator
- * @author Martin Knor <martin.knor@gmail.com>
- * @package Mk\Feed\Generators\Google
- * @see https://support.google.com/merchants/answer/188494 Documentation
- */
-abstract class Generator extends BaseGenerator {
+/** @see https://support.google.com/merchants/answer/188494 */
+abstract class Generator extends BaseGenerator
+{
+	protected function getTemplate(string $name): string
+	{
+		$reflection = new \ReflectionClass(__CLASS__);
 
-    /**
-     * @param $name
-     * @return string
-     */
-    protected function getTemplate($name)
-    {
-        $reflection = new \ReflectionClass(__CLASS__);
-        return dirname($reflection->getFileName()) . '/latte/' . $name . '.latte';
-    }
-
+		return dirname($reflection->getFileName()) . '/latte/' . $name . '.latte';
+	}
 }

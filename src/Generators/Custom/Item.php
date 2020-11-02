@@ -1,988 +1,820 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators\Custom;
 
-use Mk, Nette;
+
 use Mk\Feed\Generators\BaseItem;
+use Nette\Utils\DateTime;
 
-/**
- * Class Item
- * @property itemId
- * @property heurekaCpc
- * @author Martin Knor <martin.knor@gmail.com>
- * @package Mk\Feed\Generators\Heureka
- * @see http://sluzby.heureka.cz/napoveda/xml-feed/ Documentation
- */
-class Item extends BaseItem {
-
-    /** @var string @required */
-    protected $itemId;
-
-    /** @var string @required */
-    protected $productName;
-
-    /** @var string|null */
-    protected $product;
-
-    /** @var bool */
-    protected $status;
-
-    /** @var string|null */
-    protected $name;
-    /** @var string |null*/
-    protected $nameExt;
-    /** @var string |null*/
-    protected $descriptionShort;
-    /** @var string |null*/
-    protected $title;
-    /** @var string|null */
-    protected $metaDescription;
-    /** @var string |null*/
-    protected $metaKeywords;
-    /** @var string |null*/
-    protected $parts;
-    /** @var float|null */
-    protected $priceOriginal;
-    /** @var int |null*/
-    protected $soldQty;
-    /** @var string |null*/
-    protected $defaultCategory;
-    /** @var float|null */
-    protected $weight;
-    /** @var float |null*/
-    protected $cost;
-    /** @var float |null*/
-    protected $margin;
-    /** @var bool|null */
-    protected $freeDelivery;
-    /** @var string|null */
-    protected $model;
-    /** @var bool */
-    protected $inSale;
-    /** @var bool */
-    protected $archived;
-    /** @var int |null*/
-    protected $minQuantity;
-    /** @var int|null */
-    protected $maxQuantity;
-    /** @var string|null */
-    protected $guarantee;
-    /** @var string |null*/
-    protected $unit;
-    /** @var string |null*/
-    protected $vat;
-    /** @var int |null*/
-    protected $stock;
-    /** @var string |null*/
-    protected $sku;
-
-    /** @var string[] */
-    protected $suppliers;
-
-    /** @var string | null */
-    protected $availability;
-
-    /** @var string @required */
-    protected $description;
-
-    /**  @var string @required */
-    protected $url;
-
-    /** @var Image[] */
-    protected $images = array();
-
-    /** @var string|null */
-    protected $videoUrl;
-
-    /** @var float @required */
-    protected $priceVat;
-    /** @var float  */
-    protected $priceNoVat;
-
-    /** @var string|null */
-    protected $itemType;
-
-    /** @var Parameter[] */
-    protected $parameters = array();
-
-    /** @var string|null */
-    protected $manufacturer;
-
-    /** @var string|null */
-    protected $categoryText;
-
-    /** @var string|null */
-    protected $ean;
-
-    /** @var string|null */
-    protected $isbn;
-
-    /** @var float|null */
-    protected $heurekaCpc;
-
-    /** @var \DateTime|int @required */
-    protected $deliveryDate;
-
-    /** @var Delivery[] */
-    protected $deliveries = array();
-
-    /** @var string|null */
-    protected $itemGroupId;
-
-    /** @var array */
-    protected $accessories = array();
-
-    /** @var float */
-    protected $dues = 0;
-
-    /** @var Gift[] */
-    protected $gifts = array();
-
-    /**
-     * @return float
-     */
-    public function getDues()
-    {
-        return $this->dues;
-    }
-
-    /**
-     * @param float $dues
-     * @return Item
-     */
-    public function setDues($dues)
-    {
-        $this->dues = (float)$dues;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getVideoUrl()
-    {
-        return $this->videoUrl;
-    }
-
-    /**
-     * @param string $videoUrl
-     * @return $this
-     */
-    public function setVideoUrl($videoUrl)
-    {
-        $this->videoUrl = $videoUrl;
-
-        return $this;
-    }
-
-    /**
-     * @param $url
-     * @return $this
-     */
-    public function addImage($url)
-    {
-        $this->images[] = new Image($url);
-
-        return $this;
-    }
-
-    /**
-     * @param $id
-     * @param $price
-     * @param null $priceCod
-     * @return $this
-     */
-    public function addDelivery($id, $price, $priceCod = null)
-    {
-        $this->deliveries[] = new Delivery($id, $price, $priceCod);
-
-        return $this;
-    }
-
-    /**
-     * @return Delivery[]
-     */
-    public function getDeliveries()
-    {
-        return $this->deliveries;
-    }
-
-    /**
-     * @param $name
-     * @param $val
-     * @param null $unit
-     * @return Item
-     */
-    public function addParameter($name, $val, $unit = null)
-    {
-        $this->parameters[] = new Parameter($name, $val, $unit);
-
-        return $this;
-    }
-
-    /**
-     * @param $name
-     * @return $this
-     */
-    public function addGift($name)
-    {
-        $this->gifts[] = new Gift($name);
-
-        return $this;
-    }
-
-    /**
-     * @param $itemId
-     * @return $this
-     */
-    public function addAccessory($itemId)
-    {
-        $this->accessories[] = $itemId;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAccessories()
-    {
-        return $this->accessories;
-    }
-
-    /**
-     * @return string
-     */
-    public function getProductName()
-    {
-        return $this->productName;
-    }
-
-    /**
-     * @param string $productName
-     * @return Item
-     */
-    public function setProductName($productName)
-    {
-        $this->productName = (string)$productName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     * @return Item
-     */
-    public function setDescription($description)
-    {
-        $this->description = (string)$description;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param string $url
-     * @return Item
-     */
-    public function setUrl($url)
-    {
-        $this->url = (string)$url;
-
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPriceVat()
-    {
-        return $this->priceVat;
-    }
-
-    /**
-     * @param float $priceVat
-     * @return Item
-     */
-    public function setPriceVat($priceVat)
-    {
-        $this->priceVat = (float)$priceVat;
-
-        return $this;
-    }
-
-    /**
-     * @return int|string
-     */
-    public function getDeliveryDate()
-    {
-        return $this->deliveryDate instanceof \DateTime ? $this->deliveryDate->format('Y-m-d') : $this->deliveryDate;
-    }
-
-    /**
-     * @param int|\DateTime $deliveryDate
-     * @return Item
-     */
-    public function setDeliveryDate($deliveryDate)
-    {
-        if (!is_int($deliveryDate) && !($deliveryDate instanceof \DateTime)) {
-            throw new \InvalidArgumentException("Delivery date must be integer or DateTime");
-        }
-        $this->deliveryDate = $deliveryDate;
-
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getItemId()
-    {
-        return $this->itemId;
-    }
-
-    /**
-     * @param null|string $itemId
-     * @return Item
-     */
-    public function setItemId($itemId)
-    {
-        $this->itemId = $itemId;
-
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getEan()
-    {
-        return $this->ean;
-    }
-
-    /**
-     * @param null|string $ean
-     * @return Item
-     */
-    public function setEan($ean)
-    {
-        $this->ean = $ean;
-
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getIsbn()
-    {
-        return $this->isbn;
-    }
-
-    /**
-     * @param null|string $isbn
-     * @return Item
-     */
-    public function setIsbn($isbn)
-    {
-        $this->isbn = $isbn;
-
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getItemGroupId()
-    {
-        return $this->itemGroupId;
-    }
-
-    /**
-     * @param null|string $itemGroupId
-     * @return Item
-     */
-    public function setItemGroupId($itemGroupId)
-    {
-        $this->itemGroupId = $itemGroupId;
-
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getManufacturer()
-    {
-        return $this->manufacturer;
-    }
-
-    /**
-     * @param null|string $manufacturer
-     * @return Item
-     */
-    public function setManufacturer($manufacturer)
-    {
-        $this->manufacturer = $manufacturer;
-
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getCategoryText()
-    {
-        return $this->categoryText;
-    }
-
-    /**
-     * @param null|string $categoryText
-     * @return Item
-     */
-    public function setCategoryText($categoryText)
-    {
-        $this->categoryText = $categoryText;
-
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getProduct()
-    {
-        return $this->product;
-    }
-
-    /**
-     * @param null|string $product
-     * @return Item
-     */
-    public function setProduct($product)
-    {
-        $this->product = $product;
-
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getItemType()
-    {
-        return $this->itemType;
-    }
-
-    /**
-     * @return Image[]
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
-
-    /**
-     * @return Gift[]
-     */
-    public function getGifts()
-    {
-        return $this->gifts;
-    }
-
-    /**
-     * @return Parameter[]
-     */
-    public function getParameters()
-    {
-        return $this->parameters;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getHeurekaCpc()
-    {
-        return $this->heurekaCpc;
-    }
-
-    /**
-     * @param null|string $heurekaCpc
-     * @return $this
-     */
-    public function setHeurekaCpc($heurekaCpc)
-    {
-        $this->heurekaCpc = $heurekaCpc;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getStatus(): ?bool {
-        return $this->status;
-    }
-
-    /**
-     * @param bool $status
-     * @return Item
-     */
-    public function setStatus(bool $status): Item {
-        $this->status = $status;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getName(): ?string {
-        return $this->name;
-    }
-
-    /**
-     * @param null|string $name
-     * @return Item
-     */
-    public function setName(?string $name): Item {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getNameExt(): ?string {
-        return $this->nameExt;
-    }
-
-    /**
-     * @param null|string $nameExt
-     * @return Item
-     */
-    public function setNameExt(?string $nameExt): Item {
-        $this->nameExt = $nameExt;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getDescriptionShort(): ?string {
-        return $this->descriptionShort;
-    }
-
-    /**
-     * @param null|string $descriptionShort
-     * @return Item
-     */
-    public function setDescriptionShort(?string $descriptionShort): Item {
-        $this->descriptionShort = $descriptionShort;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getTitle(): ?string {
-        return $this->title;
-    }
-
-    /**
-     * @param null|string $title
-     * @return Item
-     */
-    public function setTitle(?string $title): Item {
-        $this->title = $title;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getMetaDescription(): ?string {
-        return $this->metaDescription;
-    }
-
-    /**
-     * @param null|string $metaDescription
-     * @return Item
-     */
-    public function setMetaDescription(?string $metaDescription): Item {
-        $this->metaDescription = $metaDescription;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getMetaKeywords(): ?string {
-        return $this->metaKeywords;
-    }
-
-    /**
-     * @param null|string $metaKeywords
-     * @return Item
-     */
-    public function setMetaKeywords(?string $metaKeywords): Item {
-        $this->metaKeywords = $metaKeywords;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getParts(): ?string {
-        return $this->parts;
-    }
-
-    /**
-     * @param null|string $parts
-     * @return Item
-     */
-    public function setParts(?string $parts): Item {
-        $this->parts = $parts;
-        return $this;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getPriceOriginal(): ?float {
-        return $this->priceOriginal;
-    }
-
-    /**
-     * @param float|null $priceOriginal
-     * @return Item
-     */
-    public function setPriceOriginal(?float $priceOriginal): Item {
-        $this->priceOriginal = $priceOriginal;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getSoldQty(): ?int {
-        return $this->soldQty;
-    }
-
-    /**
-     * @param int|null $soldQty
-     * @return Item
-     */
-    public function setSoldQty(?int $soldQty): Item {
-        $this->soldQty = $soldQty;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getDefaultCategory(): ?string {
-        return $this->defaultCategory;
-    }
-
-    /**
-     * @param null|string $defaultCategory
-     * @return Item
-     */
-    public function setDefaultCategory(?string $defaultCategory): Item {
-        $this->defaultCategory = $defaultCategory;
-        return $this;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getWeight(): ?float {
-        return $this->weight;
-    }
-
-    /**
-     * @param float|null $weight
-     * @return Item
-     */
-    public function setWeight(?float $weight): Item {
-        $this->weight = $weight;
-        return $this;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getCost(): ?float {
-        return $this->cost;
-    }
-
-    /**
-     * @param float|null $cost
-     * @return Item
-     */
-    public function setCost(?float $cost): Item {
-        $this->cost = $cost;
-        return $this;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getMargin(): ?float {
-        return $this->margin;
-    }
-
-    /**
-     * @param float|null $margin
-     * @return Item
-     */
-    public function setMargin(?float $margin): Item {
-        $this->margin = $margin;
-        return $this;
-    }
-
-    /**
-     * @return bool|null
-     */
-    public function getFreeDelivery(): ?bool {
-        return $this->freeDelivery;
-    }
-
-    /**
-     * @param bool|null $freeDelivery
-     * @return Item
-     */
-    public function setFreeDelivery(?bool $freeDelivery): Item {
-        $this->freeDelivery = $freeDelivery;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getModel(): ?string {
-        return $this->model;
-    }
-
-    /**
-     * @param null|string $model
-     * @return Item
-     */
-    public function setModel(?string $model): Item {
-        $this->model = $model;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isInSale(): ?bool {
-        return $this->inSale;
-    }
-
-    /**
-     * @param bool $inSale
-     * @return Item
-     */
-    public function setInSale(bool $inSale): Item {
-        $this->inSale = $inSale;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isArchived(): bool {
-        return $this->archived;
-    }
-
-    /**
-     * @param bool $archived
-     * @return Item
-     */
-    public function setArchived(bool $archived): Item {
-        $this->archived = $archived;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getMinQuantity(): ?int {
-        return $this->minQuantity;
-    }
-
-    /**
-     * @param int|null $minQuantity
-     * @return Item
-     */
-    public function setMinQuantity(?int $minQuantity): Item {
-        $this->minQuantity = $minQuantity;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getMaxQuantity(): ?int {
-        return $this->maxQuantity;
-    }
-
-    /**
-     * @param int|null $maxQuantity
-     * @return Item
-     */
-    public function setMaxQuantity(?int $maxQuantity): Item {
-        $this->maxQuantity = $maxQuantity;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getGuarantee(): ?string {
-        return $this->guarantee;
-    }
-
-    /**
-     * @param null|string $guarantee
-     * @return Item
-     */
-    public function setGuarantee(?string $guarantee): Item {
-        $this->guarantee = $guarantee;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getUnit(): ?string {
-        return $this->unit;
-    }
-
-    /**
-     * @param null|string $unit
-     * @return Item
-     */
-    public function setUnit(?string $unit): Item {
-        $this->unit = $unit;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getAvailability(): ?string {
-        return $this->availability;
-    }
-
-    /**
-     * @param null|string $availability
-     * @return Item
-     */
-    public function setAvailability(?string $availability): Item {
-        $this->availability = $availability;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getVat(): ?string {
-        return $this->vat;
-    }
-
-    /**
-     * @param null|string $vat
-     * @return Item
-     */
-    public function setVat(?string $vat): Item {
-        $this->vat = $vat;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getStock(): ?int {
-        return $this->stock;
-    }
-
-    /**
-     * @param int|null $stock
-     * @return Item
-     */
-    public function setStock(?int $stock): Item {
-        $this->stock = $stock;
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPriceNoVat(){
-        return $this->priceNoVat;
-    }
-
-    /**
-     * @param float $priceNoVat
-     * @return Item
-     */
-    public function setPriceNoVat(float $priceNoVat): Item {
-        $this->priceNoVat = $priceNoVat;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getSku(): ?string {
-        return $this->sku;
-    }
-
-    /**
-     * @param null|string $sku
-     * @return Item
-     */
-    public function setSku(?string $sku): Item {
-        $this->sku = $sku;
-        return $this;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getSuppliers(): ?array {
-        return $this->suppliers;
-    }
-
-    /**
-     * @param string[] $supplier
-     * @return Item
-     */
-    public function addSupplier(string $supplier): Item {
-        $this->suppliers[] = $supplier;
-        return $this;
-    }
+/** @see http://sluzby.heureka.cz/napoveda/xml-feed/ */
+class Item extends BaseItem
+{
+	protected ?string $itemId;
 
+	protected string $productName;
 
+	protected ?string $product;
 
+	protected bool $status;
 
+	protected ?string $name;
 
+	protected ?string $nameExt;
+
+	protected ?string $descriptionShort;
+
+	protected ?string $title;
+
+	protected ?string $metaDescription;
+
+	protected ?string $metaKeywords;
+
+	protected ?string $parts;
+
+	protected ?float $priceOriginal;
+
+	protected ?int $soldQty;
+
+	protected ?string $defaultCategory;
+
+	protected ?float $weight;
+
+	protected ?float $cost;
+
+	protected ?float $margin;
+
+	protected ?bool $freeDelivery;
+
+	protected ?string $model;
+
+	protected bool $inSale;
+
+	protected bool $archived;
+
+	protected ?int $minQuantity;
+
+	protected ?int $maxQuantity;
+
+	protected ?string $guarantee;
+
+	protected ?string $unit;
+
+	protected ?string $vat;
+
+	protected ?int $stock;
+
+	protected ?string $sku;
+
+	/** @var string[] */
+	protected ?array $suppliers = null;
+
+	protected ?string  $availability;
+
+	protected string $description;
+
+	protected string $url;
+
+	/** @var Image[] */
+	protected array $images = [];
+
+	protected ?string $videoUrl;
+
+	protected float $priceVat;
+
+	protected float $priceNoVat;
+
+	protected ?string $itemType;
+
+	/** @var Parameter[] */
+	protected array $parameters = [];
+
+	protected ?string $manufacturer;
+
+	protected ?string $categoryText;
+
+	protected ?string $ean;
+
+	protected ?string $isbn;
+
+	protected ?float $heurekaCpc;
+
+	protected ?\DateTime $deliveryDate;
+
+	/** @var Delivery[] */
+	protected array $deliveries = [];
+
+	protected ?string $itemGroupId;
+
+	/** @var int[] */
+	protected array $accessories = [];
+
+	protected float $dues = 0;
+
+	/** @var Gift[] */
+	protected array $gifts = [];
+
+
+	public function getDues(): float
+	{
+		return $this->dues;
+	}
+
+
+	public function setDues(float $dues): self
+	{
+		$this->dues = $dues;
+
+		return $this;
+	}
+
+
+	public function getVideoUrl(): string
+	{
+		return $this->videoUrl;
+	}
+
+
+	public function setVideoUrl(string $videoUrl): self
+	{
+		$this->videoUrl = $videoUrl;
+
+		return $this;
+	}
+
+
+	public function addImage(string $url): self
+	{
+		$this->images[] = new Image($url);
+
+		return $this;
+	}
+
+
+	public function addDelivery(string $id, float $price, ?float $priceCod = null): self
+	{
+		$this->deliveries[] = new Delivery($id, $price, $priceCod);
+
+		return $this;
+	}
+
+
+	/**
+	 * @return Delivery[]
+	 */
+	public function getDeliveries(): array
+	{
+		return $this->deliveries;
+	}
+
+
+	public function addParameter(string $name, $val, $unit = null): self
+	{
+		$this->parameters[] = new Parameter($name, $val, $unit);
+
+		return $this;
+	}
+
+
+	public function addGift(string $name): self
+	{
+		$this->gifts[] = new Gift($name);
+
+		return $this;
+	}
+
+
+	public function addAccessory(int $itemId): self
+	{
+		$this->accessories[] = $itemId;
+
+		return $this;
+	}
+
+
+	/**
+	 * @return int[]
+	 */
+	public function getAccessories(): array
+	{
+		return $this->accessories;
+	}
+
+
+	public function getProductName(): string
+	{
+		return $this->productName;
+	}
+
+
+	public function setProductName(string $productName): self
+	{
+		$this->productName = $productName;
+
+		return $this;
+	}
+
+
+	public function getDescription(): string
+	{
+		return $this->description;
+	}
+
+
+	public function setDescription(string $description): self
+	{
+		$this->description = $description;
+
+		return $this;
+	}
+
+
+	public function getUrl(): string
+	{
+		return $this->url;
+	}
+
+
+	public function setUrl(string $url): self
+	{
+		$this->url = $url;
+
+		return $this;
+	}
+
+
+	public function getPriceVat(): float
+	{
+		return $this->priceVat;
+	}
+
+
+	public function setPriceVat(float $priceVat): self
+	{
+		$this->priceVat = $priceVat;
+
+		return $this;
+	}
+
+
+	public function getDeliveryDate(): ?\DateTime
+	{
+		return $this->deliveryDate;
+	}
+
+
+	/**
+	 * @param int|\DateTime|null $deliveryDate
+	 * @return self
+	 */
+	public function setDeliveryDate($deliveryDate): self
+	{
+		if (!is_int($deliveryDate) && !($deliveryDate instanceof \DateTime)) {
+			throw new \InvalidArgumentException('Delivery date must be integer or DateTime, but type "' . \gettype($deliveryDate) . '" given.');
+		}
+		$this->deliveryDate = DateTime::from($deliveryDate);
+
+		return $this;
+	}
+
+
+	public function getItemId(): ?string
+	{
+		return $this->itemId;
+	}
+
+
+	public function setItemId(?string $itemId): self
+	{
+		$this->itemId = $itemId;
+
+		return $this;
+	}
+
+
+	public function getEan(): ?string
+	{
+		return $this->ean;
+	}
+
+
+	public function setEan(?string $ean): self
+	{
+		$this->ean = $ean;
+
+		return $this;
+	}
+
+
+	public function getIsbn(): ?string
+	{
+		return $this->isbn;
+	}
+
+
+	public function setIsbn(?string $isbn): self
+	{
+		$this->isbn = $isbn;
+
+		return $this;
+	}
+
+
+	public function getItemGroupId(): ?string
+	{
+		return $this->itemGroupId;
+	}
+
+
+	public function setItemGroupId(?string $itemGroupId): self
+	{
+		$this->itemGroupId = $itemGroupId;
+
+		return $this;
+	}
+
+
+	public function getManufacturer(): ?string
+	{
+		return $this->manufacturer;
+	}
+
+
+	public function setManufacturer(?string $manufacturer): self
+	{
+		$this->manufacturer = $manufacturer;
+
+		return $this;
+	}
+
+
+	public function getCategoryText(): ?string
+	{
+		return $this->categoryText;
+	}
+
+
+	public function setCategoryText(?string $categoryText): self
+	{
+		$this->categoryText = $categoryText;
+
+		return $this;
+	}
+
+
+	public function getProduct(): ?string
+	{
+		return $this->product;
+	}
+
+
+	public function setProduct(?string $product): self
+	{
+		$this->product = $product;
+
+		return $this;
+	}
+
+
+	public function getItemType(): ?string
+	{
+		return $this->itemType;
+	}
+
+
+	/**
+	 * @return Image[]
+	 */
+	public function getImages(): array
+	{
+		return $this->images;
+	}
+
+
+	/**
+	 * @return Gift[]
+	 */
+	public function getGifts(): array
+	{
+		return $this->gifts;
+	}
+
+
+	/**
+	 * @return Parameter[]
+	 */
+	public function getParameters(): array
+	{
+		return $this->parameters;
+	}
+
+
+	public function getHeurekaCpc(): ?string
+	{
+		return $this->heurekaCpc;
+	}
+
+
+	public function setHeurekaCpc(?string $heurekaCpc): self
+	{
+		$this->heurekaCpc = $heurekaCpc;
+
+		return $this;
+	}
+
+
+	public function getStatus(): ?bool
+	{
+		return $this->status;
+	}
+
+
+	public function setStatus(bool $status): self
+	{
+		$this->status = $status;
+
+		return $this;
+	}
+
+
+	public function getName(): ?string
+	{
+		return $this->name;
+	}
+
+
+	public function setName(?string $name): self
+	{
+		$this->name = $name;
+
+		return $this;
+	}
+
+
+	public function getNameExt(): ?string
+	{
+		return $this->nameExt;
+	}
+
+
+	public function setNameExt(?string $nameExt): self
+	{
+		$this->nameExt = $nameExt;
+
+		return $this;
+	}
+
+
+	public function getDescriptionShort(): ?string
+	{
+		return $this->descriptionShort;
+	}
+
+
+	public function setDescriptionShort(?string $descriptionShort): self
+	{
+		$this->descriptionShort = $descriptionShort;
+
+		return $this;
+	}
+
+
+	public function getTitle(): ?string
+	{
+		return $this->title;
+	}
+
+
+	public function setTitle(?string $title): self
+	{
+		$this->title = $title;
+
+		return $this;
+	}
+
+
+	public function getMetaDescription(): ?string
+	{
+		return $this->metaDescription;
+	}
+
+
+	public function setMetaDescription(?string $metaDescription): self
+	{
+		$this->metaDescription = $metaDescription;
+
+		return $this;
+	}
+
+
+	public function getMetaKeywords(): ?string
+	{
+		return $this->metaKeywords;
+	}
+
+
+	public function setMetaKeywords(?string $metaKeywords): self
+	{
+		$this->metaKeywords = $metaKeywords;
+
+		return $this;
+	}
+
+
+	public function getParts(): ?string
+	{
+		return $this->parts;
+	}
+
+
+	public function setParts(?string $parts): self
+	{
+		$this->parts = $parts;
+
+		return $this;
+	}
+
+
+	public function getPriceOriginal(): ?float
+	{
+		return $this->priceOriginal;
+	}
+
+
+	public function setPriceOriginal(?float $priceOriginal): self
+	{
+		$this->priceOriginal = $priceOriginal;
+
+		return $this;
+	}
+
+
+	public function getSoldQty(): ?int
+	{
+		return $this->soldQty;
+	}
+
+
+	public function setSoldQty(?int $soldQty): self
+	{
+		$this->soldQty = $soldQty;
+
+		return $this;
+	}
+
+
+	public function getDefaultCategory(): ?string
+	{
+		return $this->defaultCategory;
+	}
+
+
+	public function setDefaultCategory(?string $defaultCategory): self
+	{
+		$this->defaultCategory = $defaultCategory;
+
+		return $this;
+	}
+
+
+	public function getWeight(): ?float
+	{
+		return $this->weight;
+	}
+
+
+	public function setWeight(?float $weight): self
+	{
+		$this->weight = $weight;
+
+		return $this;
+	}
+
+
+	public function getCost(): ?float
+	{
+		return $this->cost;
+	}
+
+
+	public function setCost(?float $cost): self
+	{
+		$this->cost = $cost;
+
+		return $this;
+	}
+
+
+	public function getMargin(): ?float
+	{
+		return $this->margin;
+	}
+
+
+	public function setMargin(?float $margin): self
+	{
+		$this->margin = $margin;
+
+		return $this;
+	}
+
+
+	public function getFreeDelivery(): ?bool
+	{
+		return $this->freeDelivery;
+	}
+
+
+	public function setFreeDelivery(?bool $freeDelivery): self
+	{
+		$this->freeDelivery = $freeDelivery;
+
+		return $this;
+	}
+
+
+	public function getModel(): ?string
+	{
+		return $this->model;
+	}
+
+
+	public function setModel(?string $model): self
+	{
+		$this->model = $model;
+
+		return $this;
+	}
+
+
+	public function isInSale(): ?bool
+	{
+		return $this->inSale;
+	}
+
+
+	public function setInSale(bool $inSale): self
+	{
+		$this->inSale = $inSale;
+
+		return $this;
+	}
+
+
+	public function isArchived(): bool
+	{
+		return $this->archived;
+	}
+
+
+	public function setArchived(bool $archived): self
+	{
+		$this->archived = $archived;
+
+		return $this;
+	}
+
+
+	public function getMinQuantity(): ?int
+	{
+		return $this->minQuantity;
+	}
+
+
+	public function setMinQuantity(?int $minQuantity): self
+	{
+		$this->minQuantity = $minQuantity;
+
+		return $this;
+	}
+
+
+	public function getMaxQuantity(): ?int
+	{
+		return $this->maxQuantity;
+	}
+
+
+	public function setMaxQuantity(?int $maxQuantity): self
+	{
+		$this->maxQuantity = $maxQuantity;
+
+		return $this;
+	}
+
+
+	public function getGuarantee(): ?string
+	{
+		return $this->guarantee;
+	}
+
+
+	public function setGuarantee(?string $guarantee): self
+	{
+		$this->guarantee = $guarantee;
+
+		return $this;
+	}
+
+
+	public function getUnit(): ?string
+	{
+		return $this->unit;
+	}
+
+
+	public function setUnit(?string $unit): self
+	{
+		$this->unit = $unit;
+
+		return $this;
+	}
+
+
+	public function getAvailability(): ?string
+	{
+		return $this->availability;
+	}
+
+
+	public function setAvailability(?string $availability): self
+	{
+		$this->availability = $availability;
+
+		return $this;
+	}
+
+
+	public function getVat(): ?string
+	{
+		return $this->vat;
+	}
+
+
+	public function setVat(?string $vat): self
+	{
+		$this->vat = $vat;
+
+		return $this;
+	}
+
+
+	public function getStock(): ?int
+	{
+		return $this->stock;
+	}
+
+
+	public function setStock(?int $stock): self
+	{
+		$this->stock = $stock;
+
+		return $this;
+	}
+
+
+	public function getPriceNoVat(): float
+	{
+		return $this->priceNoVat;
+	}
+
+
+	public function setPriceNoVat(float $priceNoVat): self
+	{
+		$this->priceNoVat = $priceNoVat;
+
+		return $this;
+	}
+
+
+	public function getSku(): ?string
+	{
+		return $this->sku;
+	}
+
+
+	public function setSku(?string $sku): self
+	{
+		$this->sku = $sku;
+
+		return $this;
+	}
+
+
+	/**
+	 * @return string[]|null
+	 */
+	public function getSuppliers(): ?array
+	{
+		return $this->suppliers;
+	}
+
+
+	public function addSupplier(string $supplier): self
+	{
+		$this->suppliers[] = $supplier;
+
+		return $this;
+	}
 }

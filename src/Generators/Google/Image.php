@@ -1,40 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators\Google;
 
 
-use Mk, Nette;
-
-/**
- * Class Image
- * @author Martin Knor <martin.knor@gmail.com>
- * @package Mk\Feed\Generators\Google
- */
-class Image
+final class Image
 {
-
-    use Nette\SmartObject;
-
-    /** @var string */
-    private $url;
-
-    /**
-     * Image constructor.
-     * @param string $url
-     */
-    public function __construct($url)
-    {
-        $this->url = (string) $url;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
+	private string $url;
 
 
+	public function __construct(string $url)
+	{
+		$this->url = $url;
+	}
 
+
+	public function getUrl(): string
+	{
+		return $this->url;
+	}
 }

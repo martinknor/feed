@@ -1,59 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators\Custom;
 
-use Mk, Nette;
 
-/**
- * Class Parameter
- * @author Martin Knor <martin.knor@gmail.com>
- * @package Mk\Feed\Generators\Heureka
- */
-class Parameter {
+class Parameter
+{
+	protected string $name;
 
-    /* Použití smartobject viz php 7.2 to nette 2.4 */
-    use \Nette\SmartObject;
+	protected $value;
 
-    protected $name;
-    protected $value;
-    protected $unit;
-
-    /**
-     * Parameter constructor.
-     * @param $name
-     * @param $value
-     * @param $unit
-     */
-    public function __construct($name, $value, $unit = null)
-    {
-        $this->name = $name;
-        $this->value = $value;
-
-        $this->unit = $unit;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUnit() {
-        return $this->unit;
-    }
+	protected $unit;
 
 
+	public function __construct($name, $value, $unit = null)
+	{
+		$this->name = $name;
+		$this->value = $value;
+		$this->unit = $unit;
+	}
+
+
+	public function getName()
+	{
+		return $this->name;
+	}
+
+
+	public function getValue()
+	{
+		return $this->value;
+	}
+
+
+	public function getUnit()
+	{
+		return $this->unit;
+	}
 }

@@ -1,60 +1,54 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators\Zbozi;
 
-use Mk;
-use Nette;
 
-/**
- * Class ExtraMessage
- * @author Martin Knor <martin.knor@gmail.com>
- * @package Mk\Feed\Generators\Zbozi
- */
-class ExtraMessage{
+final class ExtraMessage
+{
+	public const EXTENDED_WARRANTY = 'extended_warranty';
 
-    use Nette\SmartObject;
+	public const FREE_ACCESSORIES = 'free_accessories';
 
-    CONST EXTENDED_WARRANTY = 'extended_warranty',
-        FREE_ACCESSORIES = 'free_accessories',
-        FREE_CASE = 'free_case',
-        FREE_DELIVERY = 'free_delivery',
-        FREE_GIFT = 'free_gift',
-        FREE_INSTALLATION = 'free_installation',
-        FREE_STORE_PICKUP = 'free_store_pickup',
-        VOUCHER = 'voucher';
+	public const FREE_CASE = 'free_case';
 
-    static $types = array(
-        self::EXTENDED_WARRANTY,
-        self::FREE_ACCESSORIES,
-        self::FREE_CASE,
-        self::FREE_DELIVERY,
-        self::FREE_GIFT,
-        self::FREE_INSTALLATION,
-        self::FREE_STORE_PICKUP,
-        self::VOUCHER,
-    );
+	public const FREE_DELIVERY = 'free_delivery';
 
-    /** @var string */
-    protected $type;
+	public const FREE_GIFT = 'free_gift';
 
-    /**
-     * ExtraMessage constructor.
-     * @param $type
-     */
-    public function __construct($type)
-    {
-        if (!in_array($type, self::$types)) {
-            throw new \InvalidArgumentException("Extra message with type $type doesn\t exist");
-        }
-        $this->type = (string)$type;
-    }
+	public const FREE_INSTALLATION = 'free_installation';
 
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
+	public const FREE_STORE_PICKUP = 'free_store_pickup';
 
+	public const VOUCHER = 'voucher';
+
+	/** @var string[] */
+	private static array $types = [
+		self::EXTENDED_WARRANTY,
+		self::FREE_ACCESSORIES,
+		self::FREE_CASE,
+		self::FREE_DELIVERY,
+		self::FREE_GIFT,
+		self::FREE_INSTALLATION,
+		self::FREE_STORE_PICKUP,
+		self::VOUCHER,
+	];
+
+	private string $type;
+
+
+	public function __construct(string $type)
+	{
+		if (in_array($type, self::$types, true) === false) {
+			throw new \InvalidArgumentException('Extra message with type "' . $type . '" does not exist.');
+		}
+		$this->type = $type;
+	}
+
+
+	public function getType(): string
+	{
+		return $this->type;
+	}
 }

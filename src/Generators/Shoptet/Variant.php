@@ -1,147 +1,121 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators\Shoptet;
 
 
-use Mk, Nette;
-
-/**
- * Class Image
- * @author Martin Knor <martin.knor@gmail.com>
- * @package Mk\Feed\Generators\Heureka
- */
 class Variant
 {
-    /* Použití smartobject viz php 7.2 to nette 2.4 */
-    use \Nette\SmartObject;
+	/** @var Parameter[] */
+	protected array $parameters = [];
 
-    /** @var string */
-    private $code;
+	protected ?string $vat;
 
-    /** @var Parameter[] */
-    protected $parameters = array();
+	protected ?float $weight;
 
-    /** @var string */
-    protected $vat;
+	protected ?float $priceVat;
 
-    /** @var float */
-    protected $weight;
+	protected ?string $availability;
 
-    /** @var float @required */
-    protected $priceVat;
-
-    /** @var string */
-    protected $availability;
-
-    /**
-     * @return string
-     */
-    public function getCode(): ?string {
-        return $this->code;
-    }
-
-    /**
-     * @param string $code
-     * @return Variant
-     */
-    public function setCode(?string $code): Variant {
-        $this->code = $code;
-        return $this;
-    }
-
-    /**
-     * @return Parameter[]
-     */
-    public function getParameters(): array {
-        return $this->parameters;
-    }
-
-    /**
-     * @param Parameter[] $parameters
-     * @return Variant
-     */
-    public function setParameters(array $parameters): Variant {
-        $this->parameters = $parameters;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getVat(): ?string {
-        return $this->vat;
-    }
-
-    /**
-     * @param string $vat
-     * @return Variant
-     */
-    public function setVat(?string $vat): Variant {
-        $this->vat = $vat;
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getWeight(): ?float {
-        return $this->weight;
-    }
-
-    /**
-     * @param float $weight
-     * @return Variant
-     */
-    public function setWeight(?float $weight): Variant {
-        $this->weight = $weight;
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPriceVat(): float {
-        return $this->priceVat;
-    }
-
-    /**
-     * @param float $priceVat
-     * @return Variant
-     */
-    public function setPriceVat(float $priceVat): Variant {
-        $this->priceVat = $priceVat;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAvailability(): ?string {
-        return $this->availability;
-    }
-
-    /**
-     * @param string $availability
-     * @return Variant
-     */
-    public function setAvailability(?string $availability): Variant {
-        $this->availability = $availability;
-        return $this;
-    }
-
-    /**
-     * @param $name
-     * @param $val
-     * @return Variant
-     */
-    public function addParameter($name, $val)
-    {
-        $this->parameters[] = new Parameter($name, $val);
-
-        return $this;
-    }
+	private ?string $code;
 
 
+	public function getCode(): ?string
+	{
+		return $this->code;
+	}
 
 
+	public function setCode(?string $code): self
+	{
+		$this->code = $code;
+
+		return $this;
+	}
+
+
+	/**
+	 * @return Parameter[]
+	 */
+	public function getParameters(): array
+	{
+		return $this->parameters;
+	}
+
+
+	/**
+	 * @param Parameter[] $parameters
+	 * @return self
+	 */
+	public function setParameters(array $parameters): self
+	{
+		$this->parameters = $parameters;
+
+		return $this;
+	}
+
+
+	public function getVat(): ?string
+	{
+		return $this->vat;
+	}
+
+
+	public function setVat(?string $vat): self
+	{
+		$this->vat = $vat;
+
+		return $this;
+	}
+
+
+	public function getWeight(): ?float
+	{
+		return $this->weight;
+	}
+
+
+	public function setWeight(?float $weight): self
+	{
+		$this->weight = $weight;
+
+		return $this;
+	}
+
+
+	public function getPriceVat(): float
+	{
+		return $this->priceVat;
+	}
+
+
+	public function setPriceVat(float $priceVat): self
+	{
+		$this->priceVat = $priceVat;
+
+		return $this;
+	}
+
+
+	public function getAvailability(): ?string
+	{
+		return $this->availability;
+	}
+
+
+	public function setAvailability(?string $availability): self
+	{
+		$this->availability = $availability;
+
+		return $this;
+	}
+
+
+	public function addParameter(string $name, $val): self
+	{
+		$this->parameters[] = new Parameter($name, $val);
+
+		return $this;
+	}
 }

@@ -1,30 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators\Zbozi;
 
-use Mk, Nette;
 
-class Image{
+class Image
+{
+	private string $url;
 
-    use Nette\SmartObject;
 
-    private $url;
+	public function __construct(string $url)
+	{
+		$this->url = $url;
+	}
 
-    /**
-     * Image constructor.
-     * @param $url
-     */
-    public function __construct($url)
-    {
-        $this->url = $url;
-    }
 
-    /**
-     * @return mixed
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
+	public function getUrl(): string
+	{
+		return $this->url;
+	}
 }
