@@ -1,38 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators\Google;
 
-use Mk;
-use Nette;
 
-/**
- * Class ProductType
- * @author Martin Knor <martin.knor@gmail.com>
- * @package Mk\Feed\Generators\Google
- */
-class ProductType{
+class ProductType
+{
+	protected string $text;
 
-    use Nette\SmartObject;
 
-    /** @var string */
-    protected $text;
+	public function __construct(string $text)
+	{
+		$this->text = $text;
+	}
 
-    /**
-     * ProductType constructor.
-     * @param $text
-     */
-    public function __construct($text)
-    {
-       
-        $this->text = (string)$text;
-    }
 
-    /**
-     * @return string
-     */
-    public function getText()
-    {
-        return $this->text;
-    }
-
+	public function getText(): string
+	{
+		return $this->text;
+	}
 }
+

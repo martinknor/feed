@@ -1,22 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators;
 
-/**
- * Interface IGenerator
- * @package Mk\Feed\Generators
- */
-interface IGenerator {
 
-    /**
-     * Generate file
-     * @return mixed
-     */
-    public function generate();
+interface IGenerator
+{
 
-    /**
-     * Save file
-     * @param $filename
-     * @return mixed
-     */
-    public function save($filename);
+	/**
+	 * @return mixed
+	 */
+	public function generate();
+
+	/**
+	 * @return mixed
+	 */
+	public function save(string $filename);
 }

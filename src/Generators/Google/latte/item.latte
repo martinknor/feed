@@ -1,43 +1,50 @@
 {contentType xml}
 <item>
-    <g:id>{$item->getId()}</g:id>
-    <title><![CDATA[{$item->getTitle()}]]></title>
-    <description><![CDATA[{$item->getDescription()|striptags|noescape}]]></description>
-    <link><![CDATA[{$item->getLink()}]]></link>
+	<g:id>{$item->getId()}</g:id>
+	<title><![CDATA[{$item->getTitle()}]]></title>
+	<description><![CDATA[{$item->getDescription()|striptags|noescape}]]></description>
+	<link>
+	<![CDATA[{$item->getLink()}]]></link>
 
-    {if !empty($images = $item->getImages())}
-        {foreach $images as $image}
-            {var tag = $iterator->first ? 'g:image_link' : 'g:additional_image_link'}
-            <{$tag}><![CDATA[{$image->getUrl()}]]></{$tag}>
-        {/foreach}
-    {/if}
+	{if !empty($images = $item->getImages())}
+	{foreach $images as $image}
+	{var tag = $iterator->first ? 'g:image_link' : 'g:additional_image_link'}
+	<{$tag}><![CDATA[{$image->getUrl()}]]>
+</{$tag}>
+{/foreach}
+{/if}
 
-    <g:condition n:if="$item->getCondition()">{$item->getCondition()}</g:condition>
-    <g:availability n:if="$item->getAvailability()">{$item->getAvailability()}</g:availability>
-    <g:price>{$item->getPrice()} {$item->getCurrency()}</g:price>
-    <g:identifier_exists>{$item->isIdentifierExists() ? 'TRUE' : 'FALSE'}</g:identifier_exists>
-    <g:sale_price n:if="$item->getSalePrice()">{$item->getSalePrice()}</g:sale_price>
-    <g:gtin>{if $item->getGtin()}{$item->getGtin()}{/if}</g:gtin>
-    <g:brand n:if="$item->getBrand()">{$item->getBrand()}</g:brand>
-    <g:custom_label_0 n:ifset="$item->getLabels()[0]">{$item->getLabels()[0]}</g:custom_label_0>
-    <g:custom_label_1 n:ifset="$item->getLabels()[1]">{$item->getLabels()[1]}</g:custom_label_1>
-    <g:custom_label_2 n:ifset="$item->getLabels()[2]">{$item->getLabels()[2]}</g:custom_label_2>
-    <g:custom_label_3 n:ifset="$item->getLabels()[3]">{$item->getLabels()[3]}</g:custom_label_3>
-    <g:custom_label_4 n:ifset="$item->getLabels()[4]">{$item->getLabels()[4]}</g:custom_label_4>
-    {*<g:gender>Female</g:gender>
-    <g:age_group>Adult</g:age_group>
-    <g:color>Navy</g:color>
-    <g:size>8 Standard</g:size>*}
-    <g:mpn>{if $item->getMpn()}{$item->getMpn()}{/if}</g:mpn>
-
-
-    {if !empty($productTypes = $item->getProductTypes())}
-        <g:product_type n:foreach="$productTypes as $productType" n:if="!empty($productType->getText())">{$productType->getText()}</g:product_type>
-    {/if}
+<g:condition n:if="$item->getCondition()">{$item->getCondition()}</g:condition>
+<g:availability n:if="$item->getAvailability()">{$item->getAvailability()}</g:availability>
+<g:price>{$item->getPrice()} {$item->getCurrency()}</g:price>
+<g:identifier_exists>{$item->isIdentifierExists() ? 'TRUE' : 'FALSE'}</g:identifier_exists>
+<g:sale_price n:if="$item->getSalePrice()">{$item->getSalePrice()}</g:sale_price>
+<g:gtin>{if $item->getGtin()}{$item->getGtin()}{/if}</g:gtin>
+<g:brand n:if="$item->getBrand()">{$item->getBrand()}</g:brand>
+<g:custom_label_0 n:ifset="$item->getLabels()[0]">{$item->getLabels()[0]}</g:custom_label_0>
+<g:custom_label_1 n:ifset="$item->getLabels()[1]">{$item->getLabels()[1]}</g:custom_label_1>
+<g:custom_label_2 n:ifset="$item->getLabels()[2]">{$item->getLabels()[2]}</g:custom_label_2>
+<g:custom_label_3 n:ifset="$item->getLabels()[3]">{$item->getLabels()[3]}</g:custom_label_3>
+<g:custom_label_4 n:ifset="$item->getLabels()[4]">{$item->getLabels()[4]}</g:custom_label_4>
+{*
+<g:gender>Female</g:gender>
+<g:age_group>Adult</g:age_group>
+<g:color>Navy</g:color>
+<g:size>8 Standard</g:size>*}
+<g:mpn>{if $item->getMpn()}{$item->getMpn()}{/if}</g:mpn>
 
 
-    <g:google_product_category n:if="$item->getGoogleProductCategory()">{$item->getGoogleProductCategory()}</g:google_product_category>
-    <g:item_group_id n:if="$item->getItemGroupId()">{$item->getItemGroupId()}</g:item_group_id>
-    {*<g:{$name|lower} n:foreach="$item->params as $name => $value" n:if="(!empty($item->params))">{$value}</g:{$name|lower}>*}
+{if !empty($productTypes = $item->getProductTypes())}
+<g:product_type n:foreach="$productTypes as $productType" n:if="!empty($productType->getText())">
+	{$productType->getText()}
+</g:product_type>
+{/if}
+
+
+<g:google_product_category n:if="$item->getGoogleProductCategory()">{$item->getGoogleProductCategory()}
+</g:google_product_category>
+<g:item_group_id n:if="$item->getItemGroupId()">{$item->getItemGroupId()}</g:item_group_id>
+{*
+<g:{$name|lower} n:foreach="$item->params as $name => $value" n:if="(!empty($item->params))">{$value}</g:{$name|lower}>*}
 </item>
 

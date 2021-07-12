@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators\Zbozi;
 
 
@@ -9,51 +11,50 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\LoaderResolver;
 
-class CategoriesHelper {
+final class CategoriesHelper
+{
+	public const CATEGORY_URL = 'http://napoveda.seznam.cz/soubory/Zbozi.cz/category_ID.xls';
 
-    CONST CATEGORY_URL = 'http://napoveda.seznam.cz/soubory/Zbozi.cz/category_ID.xls';
+	private ?Cache $cache = null;
 
-    /** @var \Nette\Caching\Cache */
-    private $cache;
 
-    function __construct(IStorage $storage = null)
-    {
-        if ($storage) {
-            $this->cache = new Cache($storage, __CLASS__);
-        }
-    }
+	public function __construct(?IStorage $storage = null)
+	{
+		if ($storage !== null) {
+			$this->cache = new Cache($storage, 'feed/zbozi-categories-helper');
+		}
+	}
 
-    public function getCategories()
-    {
-        $categories = array();
-        if (!$this->cache || !($categories = $this->cache->load('categories'))) {
-            $file = sys_get_temp_dir() . '/file.xls';
-            file_put_contents($file, file_get_contents(self::CATEGORY_URL));
 
-            $loaders = array(
-                new Excel5FileLoader(new FileLocator()),
-            );
+	public function getCategories()
+	{
+		$categories = [];
+		if (!$this->cache || !($categories = $this->cache->load('categories'))) {
+			$file = sys_get_temp_dir() . '/file.xls';
+			file_put_contents($file, file_get_contents(self::CATEGORY_URL));
 
-            $resolver = new LoaderResolver($loaders);
-            $loader = new DelegatingLoader($resolver);
+			$loaders = [
+				new Excel5FileLoader(new FileLocator()),
+			];
 
-            $data = $loader->load($file);
-            #clear header
-            unset($data[0]);
+			$resolver = new LoaderResolver($loaders);
+			$loader = new DelegatingLoader($resolver);
 
-            foreach ($data as $row) {
-                $categories[(int)$row[0]] = trim($row[2]);
-            }
-            asort($categories);
-            unlink($file);
+			$data = $loader->load($file);
+			#clear header
+			unset($data[0]);
 
-            if ($this->cache) {
-                $this->cache->save('categories', $categories);
-            }
-        }
+			foreach ($data as $row) {
+				$categories[(int) $row[0]] = trim($row[2]);
+			}
+			asort($categories);
+			unlink($file);
 
-        return $categories;
-    }
+			if ($this->cache) {
+				$this->cache->save('categories', $categories);
+			}
+		}
+
+		return $categories;
+	}
 }
-
-

@@ -1,38 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators\Custom;
 
-use Mk, Nette;
 
-/**
- * Class Gift
- * @author Martin Knor <martin.knor@gmail.com>
- * @package Mk\Feed\Generators\Heureka
- */
-class Gift {
+class Gift
+{
+	protected string $name;
 
-    /* Použití smartobject viz php 7.2 to nette 2.4 */
-    use \Nette\SmartObject;
 
-    /** @var string */
-    protected $name;
+	public function __construct(string $name)
+	{
+		$this->name = $name;
+	}
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
 
-    /**
-     * Gift constructor.
-     * @param $name
-     */
-    public function __construct($name)
-    {
-
-        $this->name = (string)$name;
-    }
-
+	public function getName(): string
+	{
+		return $this->name;
+	}
 }

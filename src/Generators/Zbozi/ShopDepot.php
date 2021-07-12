@@ -1,26 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators\Zbozi;
 
-use Mk, Nette;
 
-class ShopDepot{
+class ShopDepot
+{
+	private int $id;
 
-    use Nette\SmartObject;
 
-    private $id;
+	public function __construct(int $id)
+	{
+		$this->id = $id;
+	}
 
-    public function __construct($id)
-    {
-        $this->id = $id;
-    }
 
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
+	public function getId(): int
+	{
+		return $this->id;
+	}
 }

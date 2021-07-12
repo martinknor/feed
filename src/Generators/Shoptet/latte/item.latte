@@ -1,64 +1,64 @@
 {contentType xml}
 <SHOPITEM>
-    <ITEM_ID n:if="$item->getItemId() !== null">{$item->getItemId()}</ITEM_ID>
-    <PRODUCTNAME><![CDATA[{$item->getProductName()}]]></PRODUCTNAME>
-    <PRODUCT n:if="$item->getProduct()"><![CDATA[{$item->getProduct()}]]></PRODUCT>
-    <DESCRIPTION><![CDATA[{$item->getShortDescription()|striptags|noescape}]]></DESCRIPTION>
-    <SHORT_DESCRIPTION><![CDATA[{$item->getDescription()|striptags|noescape}]]></SHORT_DESCRIPTION>
-    <URL>{$item->getUrl()}</URL>
+	<ITEM_ID n:if="$item->getItemId() !== null">{$item->getItemId()}</ITEM_ID>
+	<PRODUCTNAME><![CDATA[{$item->getProductName()}]]></PRODUCTNAME>
+	<PRODUCT n:if="$item->getProduct()"><![CDATA[{$item->getProduct()}]]></PRODUCT>
+	<DESCRIPTION><![CDATA[{$item->getShortDescription()|striptags|noescape}]]></DESCRIPTION>
+	<SHORT_DESCRIPTION><![CDATA[{$item->getDescription()|striptags|noescape}]]></SHORT_DESCRIPTION>
+	<URL>{$item->getUrl()}</URL>
 
-    <IMAGES>
-        <IMAGE n:foreach="$item->getImages() as $image">
-            {$image->getUrl()}
-        </IMAGE>
-    </IMAGES>
+	<IMAGES>
+		<IMAGE n:foreach="$item->getImages() as $image">
+			{$image->getUrl()}
+		</IMAGE>
+	</IMAGES>
 
-    <VIDEO_URL n:if="$item->getVideoUrl()">{$item->getVideoUrl()}</VIDEO_URL>
-    <PRICE_VAT>{$item->getPriceVat()}</PRICE_VAT>
+	<VIDEO_URL n:if="$item->getVideoUrl()">{$item->getVideoUrl()}</VIDEO_URL>
+	<PRICE_VAT>{$item->getPriceVat()}</PRICE_VAT>
 
-    {if !empty($parameters = $item->getParameters())}
-        <TEXT_PROPERTIES>
-            <TEXT_PROPERTY n:foreach="$parameters as $parameter">
-                <NAME>{$parameter->getName()}</NAME>
-                <VALUE>{$parameter->getValue()}{$parameter->getUnit()}</VALUE>
-            </TEXT_PROPERTY>
-        </TEXT_PROPERTIES>
-    {/if}
+	{if !empty($parameters = $item->getParameters())}
+	<TEXT_PROPERTIES>
+		<TEXT_PROPERTY n:foreach="$parameters as $parameter">
+			<NAME>{$parameter->getName()}</NAME>
+			<VALUE>{$parameter->getValue()}{$parameter->getUnit()}</VALUE>
+		</TEXT_PROPERTY>
+	</TEXT_PROPERTIES>
+	{/if}
 
-    <WARRANTY n:if="$item->getWarranty()">{$item->getWarranty()}</WARRANTY>
-    <ITEM_TYPE>product</ITEM_TYPE>
-    <CODE n:if="$item->getCode()">{$item->getCode()}</CODE>
-    <MANUFACTURER n:if="$item->getManufacturer()"><![CDATA[{$item->getManufacturer()}]]></MANUFACTURER>
-    <CATEGORIES>
-        <CATEGORY n:foreach="$item->getCategories() as $category">
-            {$category}
-        </CATEGORY>
-    </CATEGORIES>
-    <EAN n:if="$item->getEan()">{$item->getEan()}</EAN>
+	<WARRANTY n:if="$item->getWarranty()">{$item->getWarranty()}</WARRANTY>
+	<ITEM_TYPE>product</ITEM_TYPE>
+	<CODE n:if="$item->getCode()">{$item->getCode()}</CODE>
+	<MANUFACTURER n:if="$item->getManufacturer()"><![CDATA[{$item->getManufacturer()}]]></MANUFACTURER>
+	<CATEGORIES>
+		<CATEGORY n:foreach="$item->getCategories() as $category">
+			{$category}
+		</CATEGORY>
+	</CATEGORIES>
+	<EAN n:if="$item->getEan()">{$item->getEan()}</EAN>
 
 
-    <AVAILABILITY n:if="$item->getAvailability()">{$item->getAvailability()}</AVAILABILITY>
-    <ITEMGROUP_ID n:if="$item->getItemGroupId()">{$item->getItemGroupId()}</ITEMGROUP_ID>
-    <WEIGHT n:if="$item->getWeight()">{$item->getWeight()}</WEIGHT>
-    <VAT n:if="$item->getVat()">{$item->getVat()}</VAT>
+	<AVAILABILITY n:if="$item->getAvailability()">{$item->getAvailability()}</AVAILABILITY>
+	<ITEMGROUP_ID n:if="$item->getItemGroupId()">{$item->getItemGroupId()}</ITEMGROUP_ID>
+	<WEIGHT n:if="$item->getWeight()">{$item->getWeight()}</WEIGHT>
+	<VAT n:if="$item->getVat()">{$item->getVat()}</VAT>
 
-    <VARIANTS n:if="count($item->getVariants())">
-        <VARIANT n:foreach="$item->getVariants() as $variant">
-            <CODE n:if="$variant->getCode()">{$variant->getCode()}</CODE>
+	<VARIANTS n:if="count($item->getVariants())">
+		<VARIANT n:foreach="$item->getVariants() as $variant">
+			<CODE n:if="$variant->getCode()">{$variant->getCode()}</CODE>
 
-            {if !empty($parameters = $variant->getParameters())}
-                <PARAMETERS>
-                    <PARAMETER n:foreach="$parameters as $parameter">
-                        <NAME>{$parameter->getName()}</NAME>
-                        <VALUE>{$parameter->getValue()}{$parameter->getUnit()}</VALUE>
-                    </PARAMETER>
-                </PARAMETERS>
-            {/if}
+			{if !empty($parameters = $variant->getParameters())}
+			<PARAMETERS>
+				<PARAMETER n:foreach="$parameters as $parameter">
+					<NAME>{$parameter->getName()}</NAME>
+					<VALUE>{$parameter->getValue()}{$parameter->getUnit()}</VALUE>
+				</PARAMETER>
+			</PARAMETERS>
+			{/if}
 
-            <CURRENCY>CZK</CURRENCY>
-            <VAT n:if="$variant->getVat()">{$variant->getVat()}</VAT>
-            <PRICE_VAT>{$variant->getPriceVat()}</PRICE_VAT>
-            <AVAILABILITY n:if="$variant->getAvailability()">{$variant->getAvailability()}</AVAILABILITY>
-        </VARIANT>
-    </VARIANTS>
+			<CURRENCY>CZK</CURRENCY>
+			<VAT n:if="$variant->getVat()">{$variant->getVat()}</VAT>
+			<PRICE_VAT>{$variant->getPriceVat()}</PRICE_VAT>
+			<AVAILABILITY n:if="$variant->getAvailability()">{$variant->getAvailability()}</AVAILABILITY>
+		</VARIANT>
+	</VARIANTS>
 </SHOPITEM>

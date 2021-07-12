@@ -1,19 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jam
- * Date: 27.1.15
- * Time: 19:30
- */
+
+declare(strict_types=1);
 
 namespace Mk\Feed;
 
 
-use Latte;
-use Mk;
-
 interface IStorage
 {
-	public function __construct($dir);
-	public function save($fileName, $content);
+	public function __construct(string $dir);
+
+	public function save(string $fileName, string $content): void;
 }

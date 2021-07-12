@@ -1,51 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mk\Feed;
 
-use Mk,
-    Latte;
 
-/**
- * Class Storage
- * @author Martin Knor <martin.knor@gmail.com>
- * @package Mk\Feed
- */
-class Storage implements IStorage {
-    /** @var */
-    private $dir;
+use Nette\Utils\FileSystem;
 
-    /**
-     * Storage constructor.
-     * @param $dir
-     */
-    function __construct($dir)
-    {
-        $this->dir = $dir;
-    }
+final class Storage implements IStorage
+{
+	private string $dir;
 
-    /**
-     * @param $filename
-     * @param $content
-     */
-    public function save($filename, $content)
-    {
-        if(!is_dir($this->dir)) {
-            mkdir($this->dir);
-        }
-        file_put_contents(realpath($this->dir) . DIRECTORY_SEPARATOR . $filename, $this->formatXml($content));
-    }
 
-    /**
-     * @param $xml
-     * @return string
-     */
-    protected function formatXml($xml)
-    {
-        $dom = new \DOMDocument('1.0');
-        $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
-        $dom->loadXML($xml);
+	public function __construct(string $dir)
+	{
+		$this->dir = $dir;
+	}
 
-        return $dom->saveXML();
-    }
+
+	public function save(string $filename, string $content): void
+	{
+		FileSystem::createDir($this->dir);
+		file_put_contents(realpath($this->dir) . DIRECTORY_SEPARATOR . $filename, $this->formatXml($content));
+	}
+
+
+	protected function formatXml(string $xml): string
+	{
+		$dom = new \DOMDocument('1.0');
+		$dom->preserveWhiteSpace = false;
+		$dom->formatOutput = true;
+		$dom->loadXML($xml);
+
+		return $dom->saveXML();
+	}
 }

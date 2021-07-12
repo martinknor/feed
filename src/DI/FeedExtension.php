@@ -1,44 +1,40 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Mk\Feed\DI;
 
-use Nette;
 
-/**
- * Class FeedExtension
- * @author Martin Knor <martin.knor@gmail.com>
- * @package Mk\Feed\DI
- */
-class FeedExtension extends Nette\DI\CompilerExtension {
-    /** @var array */
-    private $defaults = array(
-        'exportsDir' => '%wwwDir%',
-        'exports'    => array()
-    );
+use Mk\Feed\Command\FeedCommand;
+use Mk\Feed\Storage;
+use Nette\DI\CompilerExtension;
+use Symfony\Component\Console\Command\Command;
 
-    public function loadConfiguration()
-    {
-        parent::loadConfiguration();
+final class FeedExtension extends CompilerExtension
+{
+	/** @var string[]|mixed[] */
+	private array $defaults = [
+		'exportsDir' => '%wwwDir%',
+		'exports' => [],
+	];
 
-        $builder = $this->getContainerBuilder();
-        $config = $this->getConfig($this->defaults);
 
-        $builder->addDefinition($this->prefix('storage'))
-            ->setClass('\Mk\Feed\Storage', array($config['exportsDir']));
+	public function loadConfiguration(): void
+	{
+		$builder = $this->getContainerBuilder();
+		$config = $this->getConfig($this->defaults);
 
-        foreach ($config['exports'] as $export => $class) {
-            if (!class_exists($class)) {
-            }
-            $builder->addDefinition($this->prefix($export))
-                ->setClass($class);
+		$builder->addDefinition($this->prefix('storage'))
+			->setFactory(Storage::class, [$config['exportsDir']]);
 
-        }
-
-        if (class_exists('\Symfony\Component\Console\Command\Command')) {
-            $builder->addDefinition($this->prefix('command'))
-                ->setClass('Mk\Feed\Command\FeedCommand', array($config))
-                ->addTag('kdyby.console.command');
-        }
-    }
+		foreach ($config['exports'] as $export => $class) {
+			$builder->addDefinition($this->prefix($export))
+				->setFactory($class);
+		}
+		if (class_exists(Command::class)) {
+			$builder->addDefinition($this->prefix('command'))
+				->setFactory(FeedCommand::class, [$config])
+				->addTag('kdyby.console.command');
+		}
+	}
 }

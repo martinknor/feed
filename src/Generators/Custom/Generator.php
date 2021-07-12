@@ -1,24 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators\Custom;
+
 
 use Mk\Feed\Generators\BaseGenerator;
 
-/**
- * Class HeurekaGenerator
- * @author Martin Knor <martin.knor@gmail.com>
- * @package Mk\Feed\Generators
- * @see http://sluzby.heureka.cz/napoveda/xml-feed/ Documentation
- */
-abstract class Generator extends BaseGenerator {
+abstract class Generator extends BaseGenerator
+{
+	protected function getTemplate(string $name): string
+	{
+		$reflection = new \ReflectionClass(__CLASS__);
 
-    /**
-     * @param $name
-     * @return string
-     */
-    protected function getTemplate($name)
-    {
-        $reflection = new \ReflectionClass(__CLASS__);
-        return dirname($reflection->getFileName()) . '/latte/' . $name . '.latte';
-    }
-
+		return dirname($reflection->getFileName()) . '/latte/' . $name . '.latte';
+	}
 }
