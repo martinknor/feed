@@ -1,52 +1,53 @@
 {contentType xml}
 <SHOPITEM>
-    <ITEM_ID n:if="$item->getItemId()">{$item->getItemId()}</ITEM_ID>
-    <PRODUCTNAME><![CDATA[{$item->getProductName()}]]></PRODUCTNAME>
-    <PRODUCT n:if="$item->getProduct()"><![CDATA[{$item->getProduct()}]]></PRODUCT>
-    <DESCRIPTION><![CDATA[{$item->getDescription()|striptags|noescape}]]></DESCRIPTION>
-    <URL>{$item->getUrl()}</URL>
+	<ITEM_ID n:if="$item->getItemId()">{$item->getItemId()}</ITEM_ID>
+	<PRODUCTNAME><![CDATA[{$item->getProductName()}]]></PRODUCTNAME>
+	<PRODUCT n:if="$item->getProduct()"><![CDATA[{$item->getProduct()}]]></PRODUCT>
+	<DESCRIPTION><![CDATA[{$item->getDescription()|striptags|noescape}]]></DESCRIPTION>
+	<URL>{$item->getUrl()}</URL>
 
-    {if !empty($images = $item->getImages())}
-        {foreach $images as $image}
-            {var tag = $iterator->first ? 'IMGURL' : 'IMGURL_ALTERNATIVE'}
-            <{$tag}>{$image->getUrl()}</{$tag}>
-        {/foreach}
-    {/if}
+	{if !empty($images = $item->getImages())}
+	{foreach $images as $image}
+	{var tag = $iterator->first ? 'IMGURL' : 'IMGURL_ALTERNATIVE'}
+	<{$tag}>{$image->getUrl()}
+</{$tag}>
+{/foreach}
+{/if}
 
-    <VIDEO_URL n:if="$item->getVideoUrl()">{$item->getVideoUrl()}</VIDEO_URL>
-    <PRICE_VAT>{$item->getPriceVat()}</PRICE_VAT>
+<VIDEO_URL n:if="$item->getVideoUrl()">{$item->getVideoUrl()}</VIDEO_URL>
+<PRICE_VAT>{$item->getPriceVat()}</PRICE_VAT>
 
-    {if !empty($parameters = $item->getParameters())}
-        <PARAM n:foreach="$parameters as $parameter">
-            <PARAM_NAME>{$parameter->getName()}</PARAM_NAME>
-            <VAL>{$parameter->getValue()}{$parameter->getUnit()}</VAL>
-            <PERCENTAGE n:if="$parameter->getPercentage()">{$parameter->getPercentage()}%</PERCENTAGE>
-        </PARAM>
-    {/if}
+{if !empty($parameters = $item->getParameters())}
+<PARAM n:foreach="$parameters as $parameter">
+<PARAM_NAME>{$parameter->getName()}</PARAM_NAME>
+<VAL>{$parameter->getValue()}{$parameter->getUnit()}</VAL>
+<PERCENTAGE n:if="$parameter->getPercentage()">{$parameter->getPercentage()}%</PERCENTAGE>
+</PARAM>
+{/if}
 
-    <MANUFACTURER n:if="$item->getManufacturer()"><![CDATA[{$item->getManufacturer()}]]></MANUFACTURER>
-    <CATEGORYTEXT n:if="$item->getCategoryText()"><![CDATA[{$item->getCategoryText()}]]></CATEGORYTEXT>
-    <EAN n:if="$item->getEan()">{$item->getEan()}</EAN>
-    <ISBN n:if="$item->getIsbn()">{$item->getIsbn()}</ISBN>
-    <HEUREKA_CPC n:if="isset($item->heurekaCpc) && $item->getHeurekaCpc()>0">{$item->getHeurekaCpc()}</HEUREKA_CPC>
-    <DELIVERY_DATE>{$item->getDeliveryDate()}</DELIVERY_DATE>
+<MANUFACTURER n:if="$item->getManufacturer()"><![CDATA[{$item->getManufacturer()}]]></MANUFACTURER>
+<CATEGORYTEXT n:if="$item->getCategoryText()"><![CDATA[{$item->getCategoryText()}]]></CATEGORYTEXT>
+<EAN n:if="$item->getEan()">{$item->getEan()}</EAN>
+<ISBN n:if="$item->getIsbn()">{$item->getIsbn()}</ISBN>
+<HEUREKA_CPC n:if="isset($item->heurekaCpc) && $item->getHeurekaCpc()>0">{$item->getHeurekaCpc()}</HEUREKA_CPC>
+<DELIVERY_DATE>{$item->getDeliveryDate()}</DELIVERY_DATE>
 
-    {if !empty($deliveries = $item->getDeliveries())}
-        <DELIVERY n:foreach="$deliveries as $delivery">
-            <DELIVERY_ID>{$delivery->getId()}</DELIVERY_ID>
-            <DELIVERY_PRICE>{$delivery->getPrice()}</DELIVERY_PRICE>
-            <DELIVERY_PRICE_COD n:if="$delivery->getPriceCod()">{$delivery->getPriceCod()}</DELIVERY_PRICE_COD>
-        </DELIVERY>
-    {/if}
+{if !empty($deliveries = $item->getDeliveries())}
+<DELIVERY n:foreach="$deliveries as $delivery">
+	<DELIVERY_ID>{$delivery->getId()}</DELIVERY_ID>
+	<DELIVERY_PRICE>{$delivery->getPrice()}</DELIVERY_PRICE>
+	<DELIVERY_PRICE_COD n:if="$delivery->getPriceCod()">{$delivery->getPriceCod()}</DELIVERY_PRICE_COD>
+</DELIVERY>
+{/if}
 
-    <ITEMGROUP_ID n:if="$item->getItemGroupId()">{$item->getItemGroupId()}</ITEMGROUP_ID>
+<ITEMGROUP_ID n:if="$item->getItemGroupId()">{$item->getItemGroupId()}</ITEMGROUP_ID>
 
-    {if !empty($accessories = $item->getAccessories())}
-        <ACCESSORY n:foreach="$accessories as $itemId">{$itemId}</ACCESSORY>
-    {/if}
+{if !empty($accessories = $item->getAccessories())}
+<ACCESSORY n:foreach="$accessories as $itemId">{$itemId}</ACCESSORY>
+{/if}
 
-    <DUES n:if="$item->getDues()">{$item->getDues()}</DUES>
-    {if !empty($gifts = $item->getGifts())}
-        <GIFT n:foreach="$gifts as $gift">{$gift->getName()}</GIFT>
-    {/if}
+<DUES n:if="$item->getDues()">{$item->getDues()}</DUES>
+{if !empty($gifts = $item->getGifts())}
+<GIFT n:foreach="$gifts as $gift">{$gift->getName()}</GIFT>
+{/if}
 </SHOPITEM>

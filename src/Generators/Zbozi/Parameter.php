@@ -1,58 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators\Zbozi;
 
-use Mk, Nette;
 
-/**
- * Class Parameter
- * @author Martin Knor <martin.knor@gmail.com>
- * @package Mk\Feed\Generators\Zbozi
- * @see http://napoveda.seznam.cz/cz/zbozi/specifikace-xml-pro-obchody/specifikace-xml-feedu/#PARAM
- */
-class Parameter{
+/** @see http://napoveda.seznam.cz/cz/zbozi/specifikace-xml-pro-obchody/specifikace-xml-feedu/#PARAM */
+class Parameter
+{
+	protected string $name;
 
-    use Nette\SmartObject;
+	protected string $value;
 
-    protected $name;
-    protected $value;
-    protected $unit;
+	protected ?string $unit;
 
-    /**
-     * Parameter constructor.
-     * @param $name
-     * @param $value
-     * @param $unit
-     */
-    public function __construct($name, $value, $unit = null)
-    {
-        $this->name = (string)$name;
-        $this->value = (string)$value;
-        $this->unit = isset($unit) ? (string) $unit : null;
-    }
 
-    /**
-     * @return mixed
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
+	public function __construct(string $name, string $value, ?string $unit)
+	{
+		$this->name = $name;
+		$this->value = $value;
+		$this->unit = $unit;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
 
-    /**
-     * @return null
-     */
-    public function getUnit()
-    {
-        return $this->unit;
-    }
+	public function getName(): string
+	{
+		return $this->name;
+	}
 
+
+	public function getValue(): string
+	{
+		return $this->value;
+	}
+
+
+	public function getUnit(): ?string
+	{
+		return $this->unit;
+	}
 }

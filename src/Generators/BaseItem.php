@@ -1,35 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mk\Feed\Generators;
 
 
-use Mk, Nette;
-
-/**
- * Class BaseItem
- * @author Martin Knor <martin.knor@gmail.com>
- * @package Mk\Feed\Generators\Zbozi
- */
-abstract class BaseItem implements Mk\Feed\Generators\IItem
+abstract class BaseItem implements IItem
 {
-
-    use Nette\SmartObject;
-
-	/**
-	 * Validate item
-	 * @return bool return true if item is valid
-     */
-	public function validate() {
-		$reflection = $this->getReflection();
+	public function validate(): bool
+	{
+		$reflection = new \ReflectionClass($this);
 
 		foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC) as $v) {
-			if ($v->getAnnotation('required')) {
-				if (!isset($this->{$v->getName()})) {
-					return FALSE;
-				}
+			if ($v->getAnnotation('required') && !isset($this->{$v->getName()})) {
+				return false;
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 }

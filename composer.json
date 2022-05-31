@@ -5,7 +5,7 @@
 		"nette",
 		"heureka",
 		"zbozi",
-	  	"merchant"
+		"merchant"
 	],
 	"license": [
 		"MIT"
@@ -17,8 +17,8 @@
 	],
 	"require": {
 		"php": ">=5.6",
-		"nette/di": "~2.4.0",
-		"nette/utils": ">=2.4.0",
+		"nette/di": "^3.0",
+		"nette/utils": "3.1.6",
 		"latte/latte": ">=2.4.0",
 		"kdyby/console": ">=2.6.0",
 		"sergiors/importing": "1.0.1"

@@ -1,24 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mk\Feed\Command;
 
-use Symfony\Component\Console\Command\Command,
-	Symfony\Component\Console\Input\InputInterface,
-	Symfony\Component\Console\Output\OutputInterface,
-	Symfony\Component\Console\Input\InputOption;
 
-use Nette,
-	Mk;
+use Nette\DI\Container;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class FeedCommand extends Command {
+final class FeedCommand extends Command
+{
+	private Container $container;
 
-	/** @var \Nette\DI\Container */
-	private $container;
+	/** @var mixed[] */
+	private array $config;
 
-	/** @var array */
-	private $config;
 
-	public function __construct(array $config = array(), Nette\DI\Container $container)
+	public function __construct(array $config, Container $container)
 	{
 		parent::__construct();
 
@@ -26,7 +27,8 @@ class FeedCommand extends Command {
 		$this->config = $config;
 	}
 
-	protected function configure()
+
+	protected function configure(): void
 	{
 		$this->setName('Feed:export')
 			->setDescription('Export product feed')
@@ -34,30 +36,23 @@ class FeedCommand extends Command {
 			->addOption('feed', 'f', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL);
 	}
 
+
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		$show = $input->getOption('show');
-		$feeds = $input->getOption('feed');
-
-		if ($show) {
+		if ($input->getOption('show')) {
 			$output->writeln('Available exports:');
-
 			foreach ($this->config['exports'] as $k => $v) {
 				if ($v) {
 					$output->writeln('- ' . $k);
 				}
 			}
 		}
-
-		$feeds = $feeds ?: array_keys($this->config['exports']);
-		if (count($feeds)) {
+		if (\count($feeds = $input->getOption('feed') ?: array_keys($this->config['exports'])) > 0) {
 			foreach ($feeds as $feed) {
 				if (!isset($this->config['exports'][$feed]) || !$this->config['exports'][$feed]) {
 					$output->writeln('Generator for ' . $feed . ' doesn\'t exist');
 				}
-
 				$generator = $this->container->getService('feed.' . $feed);
-
 				$generator->save($feed . '.xml');
 				$output->writeln('Feed ' . $feed . ' done');
 			}
