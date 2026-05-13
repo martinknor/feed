@@ -1,24 +1,23 @@
 <?php
+declare(strict_types=1);
 
 namespace Mk\Feed\Command;
 
-use Symfony\Component\Console\Command\Command,
-	Symfony\Component\Console\Input\InputInterface,
-	Symfony\Component\Console\Output\OutputInterface,
-	Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Nette\DI\Container;
 
-use Nette,
-	Mk;
+#[AsCommand(name: 'Feed:export', description: 'Export product feed')]
+class FeedCommand extends Command
+{
+	private Container $container;
 
-class FeedCommand extends Command {
+	private array $config;
 
-	/** @var \Nette\DI\Container */
-	private $container;
-
-	/** @var array */
-	private $config;
-
-	public function __construct(array $config = array(), Nette\DI\Container $container)
+	public function __construct(array $config = [], Container $container)
 	{
 		parent::__construct();
 
@@ -26,15 +25,13 @@ class FeedCommand extends Command {
 		$this->config = $config;
 	}
 
-	protected function configure()
+	protected function configure(): void
 	{
-		$this->setName('Feed:export')
-			->setDescription('Export product feed')
-			->addOption('show', 's', InputOption::VALUE_NONE, 'Print available exports')
+		$this->addOption('show', 's', InputOption::VALUE_NONE, 'Print available exports')
 			->addOption('feed', 'f', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL);
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$show = $input->getOption('show');
 		$feeds = $input->getOption('feed');
@@ -62,5 +59,7 @@ class FeedCommand extends Command {
 				$output->writeln('Feed ' . $feed . ' done');
 			}
 		}
+
+		return Command::SUCCESS;
 	}
 }

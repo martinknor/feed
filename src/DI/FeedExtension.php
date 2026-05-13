@@ -1,44 +1,43 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Mk\Feed\DI;
 
+use Mk\Feed\Command\FeedCommand;
+use Mk\Feed\Storage;
 use Nette;
+use Nette\Schema\Expect;
 
 /**
  * Class FeedExtension
  * @author Martin Knor <martin.knor@gmail.com>
  * @package Mk\Feed\DI
  */
-class FeedExtension extends Nette\DI\CompilerExtension {
-    /** @var array */
-    private $defaults = array(
-        'exportsDir' => '%wwwDir%',
-        'exports'    => array()
-    );
+class FeedExtension extends Nette\DI\CompilerExtension
+{
+	public function getConfigSchema(): Nette\Schema\Schema
+	{
+		return Expect::structure([
+			'exportsDir' => Expect::string('%wwwDir%'),
+			'exports' => Expect::arrayOf('string'),
+		]);
+	}
 
-    public function loadConfiguration()
-    {
-        parent::loadConfiguration();
+	public function loadConfiguration()
+	{
+		$builder = $this->getContainerBuilder();
+		$config = $this->config;
 
-        $builder = $this->getContainerBuilder();
-        $config = $this->getConfig($this->defaults);
+		$builder->addDefinition($this->prefix('storage'))
+		        ->setFactory(Storage::class, [$config->exportsDir]);
+		$builder->addDefinition($this->prefix('command'))
+		        ->setFactory(FeedCommand::class, [(array)$config]);
 
-        $builder->addDefinition($this->prefix('storage'))
-            ->setClass('\Mk\Feed\Storage', array($config['exportsDir']));
+		foreach ($config->exports as $export => $class) {
+			$builder->addDefinition($this->prefix($export))
+				->setFactory($class);
 
-        foreach ($config['exports'] as $export => $class) {
-            if (!class_exists($class)) {
-            }
-            $builder->addDefinition($this->prefix($export))
-                ->setClass($class);
-
-        }
-
-        if (class_exists('\Symfony\Component\Console\Command\Command')) {
-            $builder->addDefinition($this->prefix('command'))
-                ->setClass('Mk\Feed\Command\FeedCommand', array($config))
-                ->addTag('kdyby.console.command');
-        }
-    }
+		}
+	}
 }
