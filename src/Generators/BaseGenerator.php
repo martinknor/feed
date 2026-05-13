@@ -106,7 +106,7 @@ abstract class BaseGenerator implements IGenerator {
     protected function prepareTemplate($template)
     {
         $file = $this->getTemplate($template);
-        $footerHandle = fopen('safe://' . $file, 'r');
+        $footerHandle = fopen('nette.safe://' . $file, 'r');
         $footer = fread($footerHandle, filesize($file));
         fclose($footerHandle);
         fwrite($this->handle, $footer);
