@@ -30,7 +30,7 @@
 
     {if !empty($images = $item->getImages())}
         {foreach $images as $image}
-            {var tag = $iterator->first ? 'IMGURL' : 'IMGURL_ALTERNATIVE'}
+            {var $tag = $iterator->first ? 'IMGURL' : 'IMGURL_ALTERNATIVE'}
             <{$tag}>{$image->getUrl()}</{$tag}>
         {/foreach}
     {/if}

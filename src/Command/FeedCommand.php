@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Nette\DI\Container;
+use function count;
 
 #[AsCommand(name: 'Feed:export', description: 'Export product feed')]
 class FeedCommand extends Command
@@ -28,7 +29,7 @@ class FeedCommand extends Command
 	protected function configure(): void
 	{
 		$this->addOption('show', 's', InputOption::VALUE_NONE, 'Print available exports')
-			->addOption('feed', 'f', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL);
+		     ->addOption('feed', 'f', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
@@ -46,14 +47,13 @@ class FeedCommand extends Command
 			}
 		}
 
-		$feeds = $feeds ?: array_keys($this->config['exports']);
+		$feeds = $this->config['exports'];
 		if (count($feeds)) {
-			foreach ($feeds as $feed) {
+			foreach ($feeds as $feed => $generator) {
 				if (!isset($this->config['exports'][$feed]) || !$this->config['exports'][$feed]) {
 					$output->writeln('Generator for ' . $feed . ' doesn\'t exist');
 				}
 
-				$generator = $this->container->getService('feed.' . $feed);
 
 				$generator->save($feed . '.xml');
 				$output->writeln('Feed ' . $feed . ' done');

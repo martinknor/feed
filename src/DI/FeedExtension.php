@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Mk\Feed\DI;
 
 use Mk\Feed\Command\FeedCommand;
+use Mk\Feed\Generators\Google\Generator;
 use Mk\Feed\Storage;
 use Nette;
 use Nette\Schema\Expect;
@@ -20,7 +21,7 @@ class FeedExtension extends Nette\DI\CompilerExtension
 	{
 		return Expect::structure([
 			'exportsDir' => Expect::string('%wwwDir%'),
-			'exports' => Expect::arrayOf('string'),
+			'exports' => Expect::array(),
 		]);
 	}
 
@@ -34,10 +35,6 @@ class FeedExtension extends Nette\DI\CompilerExtension
 		$builder->addDefinition($this->prefix('command'))
 		        ->setFactory(FeedCommand::class, [(array)$config]);
 
-		foreach ($config->exports as $export => $class) {
-			$builder->addDefinition($this->prefix($export))
-				->setFactory($class);
 
-		}
 	}
 }

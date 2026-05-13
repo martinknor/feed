@@ -7,7 +7,7 @@
 
     {if !empty($images = $item->getImages())}
         {foreach $images as $image}
-            {var tag = $iterator->first ? 'g:image_link' : 'g:additional_image_link'}
+            {var $tag = $iterator->first ? 'g:image_link' : 'g:additional_image_link'}
             <{$tag}><![CDATA[{$image->getUrl()}]]></{$tag}>
         {/foreach}
     {/if}

@@ -20,10 +20,12 @@ abstract class BaseItem implements Mk\Feed\Generators\IItem
 	 * @return bool return true if item is valid
      */
 	public function validate() {
-		$reflection = $this->getReflection();
+		$reflection = new \ReflectionClass($this);
 
 		foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC) as $v) {
-			if ($v->getAnnotation('required')) {
+			$docComment = $v->getDocComment();
+
+			if ($docComment && strpos($docComment, '@required') !== FALSE) {
 				if (!isset($this->{$v->getName()})) {
 					return FALSE;
 				}
